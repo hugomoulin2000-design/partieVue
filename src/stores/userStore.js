@@ -9,9 +9,12 @@ export const useUserStore = defineStore('user', {
 
   getters: {
     avatarUrl(state) {
+      const baseUrl = import.meta.env.VITE_API_URL
+
       if (state.imageName) {
-        return `https://projetl2.localhost:8443/uploads/users/${state.imageName}`
+        return `${baseUrl}/uploads/users/${state.imageName}`
       }
+
       return '/default_avatar.jpg'
     }
   },
@@ -21,15 +24,15 @@ export const useUserStore = defineStore('user', {
       const auth = useAuthStore()
       if (!auth.token) return
 
-      const res = await fetch('https://projetl2.localhost:8443/api/me', {
+      const baseUrl = import.meta.env.VITE_API_URL
+
+      const res = await fetch(`${baseUrl}/api/me`, {
         headers: {
           Authorization: `Bearer ${auth.token}`
         }
       })
 
-      if (!res.ok) {
-        return
-      }
+      if (!res.ok) return
 
       const data = await res.json()
 
