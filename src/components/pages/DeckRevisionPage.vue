@@ -35,11 +35,9 @@ const done = computed(() => total.value > 0 && bonneReponses.value === total.val
 
 const currentCard = computed(() => flashcards.value[index.value])
 
-// --- AJOUTS POUR LE DASHBOARD ---
 const cardsReviewed = ref(0)
 const durationSeconds = ref(0)
 let timer = null
-// ---------------------------------
 
 onMounted(async () => {
   deck.value = await deckStore.fetchDeck(route.params.id)
@@ -48,7 +46,6 @@ onMounted(async () => {
 
   total.value = flashcards.value.length
 
-  // --- Lancer le timer ---
   timer = setInterval(() => {
     durationSeconds.value++
   }, 1000)
@@ -85,7 +82,7 @@ function answer(isCorrect) {
 async function endSession() {
   clearInterval(timer)
 
-  await api("https://projetl2.localhost:8443/api/revision-log", {
+  await api("https://projetl2.onrender.com/api/revision-log", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
