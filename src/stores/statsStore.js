@@ -8,7 +8,7 @@ export const useStatsStore = defineStore('statsStore', {
 
   actions: {
     async fetchStats() {
-      const res = await api("https://projetl2.localhost:8443/api/stats/me")
+      const res = await api("https://projetl2.onrender.com/api/stats/me")
 
       if (!res.ok) {
         this.stats = null

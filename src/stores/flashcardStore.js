@@ -8,7 +8,7 @@ export const useFlashcardStore = defineStore('flashcardStore', {
 
   actions: {
     async fetchFlashcards(deckId) {
-      const res = await api(`https://projetl2.localhost:8443/api/decks/${deckId}/flashcards`)
+      const res = await api(`https://projetl2.onrender.com/api/decks/${deckId}/flashcards`)
 
       if (!res.ok) {
         this.flashcards = []
@@ -21,7 +21,7 @@ export const useFlashcardStore = defineStore('flashcardStore', {
     },
 
     async addFlashcard(deckId, payload) {
-      const res = await api(`https://projetl2.localhost:8443/api/decks/${deckId}/flashcards`, {
+      const res = await api(`https://projetl2.onrender.com/api/decks/${deckId}/flashcards`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -34,7 +34,7 @@ export const useFlashcardStore = defineStore('flashcardStore', {
     },
 
     async updateFlashcard(id, payload) {
-      const res = await api(`https://projetl2.localhost:8443/api/flashcards/${id}`, {
+      const res = await api(`https://projetl2.onrender.com/api/flashcards/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -47,7 +47,7 @@ export const useFlashcardStore = defineStore('flashcardStore', {
     },
 
     async deleteFlashcard(id) {
-      const res = await api(`https://projetl2.localhost:8443/api/flashcards/${id}`, {
+      const res = await api(`https://projetl2.onrender.com/api/flashcards/${id}`, {
         method: "DELETE"
       })
 
