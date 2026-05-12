@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
 document.title = "Connexion"
