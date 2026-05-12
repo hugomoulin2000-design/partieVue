@@ -26,7 +26,7 @@ async function uploadImage(e) {
   const form = new FormData()
   form.append('image', file)
 
-  const res = await fetch('https://projetl2.localhost:8443/api/user/upload', {
+  const res = await fetch('https://projetl2.onrender.com/api/user/upload', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${auth.token}`

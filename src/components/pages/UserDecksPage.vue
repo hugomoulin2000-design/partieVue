@@ -31,7 +31,7 @@ const editAnswer = ref('')
 
 onMounted(async () => {
   decks.value = await deckStore.fetchMyDecks()
-  const res = await api("https://projetl2.localhost:8443/api/tags")
+  const res = await api("https://projetl2.onrender.com/api/tags")
   if (res.ok) allTags.value = await res.json()
 })
 
