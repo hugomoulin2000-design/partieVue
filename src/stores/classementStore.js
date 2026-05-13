@@ -10,7 +10,7 @@ export const useRankingStore = defineStore('classement', {
 
   actions: {
     async fetchAll() {
-      const res = await api('https://projetl2.onrender.com/api/classement')
+      const res = await api('https://backend-flashcardulr.onrender.com/api/classement')
       if (!res.ok) return
 
       const data = await res.json()

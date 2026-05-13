@@ -9,7 +9,7 @@ export const useDeckStore = defineStore('deckStore', {
 
   actions: {
     async fetchDecks() {
-      const response = await api("https://projetl2.onrender.com/api/decks", {
+      const response = await api("https://backend-flashcardulr.onrender.com/api/decks", {
         method: "GET"
       })
 
@@ -22,7 +22,7 @@ export const useDeckStore = defineStore('deckStore', {
     },
 
     async fetchDeck(id) {
-      const response = await api(`https://projetl2.onrender.com/api/decks/${id}`, {
+      const response = await api(`https://backend-flashcardulr.onrender.com/api/decks/${id}`, {
         method: "GET"
       })
 
@@ -36,7 +36,7 @@ export const useDeckStore = defineStore('deckStore', {
     },
 
     async fetchMyDecks() {
-      const response = await api("https://projetl2.onrender.com/api/my-decks", {
+      const response = await api("https://backend-flashcardulr.onrender.com/api/my-decks", {
         method: "GET"
       })
 
@@ -50,7 +50,7 @@ export const useDeckStore = defineStore('deckStore', {
     },
 
     async createDeck(payload) {
-      const response = await api("https://projetl2.onrender.com/api/decks", {
+      const response = await api("https://backend-flashcardulr.onrender.com/api/decks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -63,7 +63,7 @@ export const useDeckStore = defineStore('deckStore', {
     },
 
     async deleteDeck(id) {
-      const response = await api(`https://projetl2.onrender.com/api/decks/${id}`, {
+      const response = await api(`https://backend-flashcardulr.onrender.com/api/decks/${id}`, {
         method: "DELETE"
       })
 
@@ -75,7 +75,7 @@ export const useDeckStore = defineStore('deckStore', {
     },
 
     async updateDeck(id, payload) {
-      const response = await api(`https://projetl2.onrender.com/api/decks/${id}`, {
+      const response = await api(`https://backend-flashcardulr.onrender.com/api/decks/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"

@@ -10,7 +10,7 @@ export const useTagStore = defineStore('tagStore', {
 
   actions: {
     async fetchTags() {
-      const res = await api('https://projetl2.onrender.com/api/tags')
+      const res = await api('https://backend-flashcardulr.onrender.com/api/tags')
       if (!res.ok) {
         this.tags = []
         return
@@ -23,7 +23,7 @@ export const useTagStore = defineStore('tagStore', {
       if (this.tagDetails[id]) {
         return this.tagDetails[id]
       }
-      const res = await api(`https://projetl2.onrender.com/api/tags/${id}`)
+      const res = await api(`https://backend-flashcardulr.onrender.com/api/tags/${id}`)
       if (!res.ok) {
         this.tagDetails[id] = null
         return null
@@ -37,7 +37,7 @@ export const useTagStore = defineStore('tagStore', {
       if (this.decksByTag[id]) {
         return this.decksByTag[id]
       }
-      const res = await api(`https://projetl2.onrender.com/api/tags/${id}/decks`)
+      const res = await api(`https://backend-flashcardulr.onrender.com/api/tags/${id}/decks`)
       if (!res.ok) {
         this.decksByTag[id] = []
         return []
@@ -48,7 +48,7 @@ export const useTagStore = defineStore('tagStore', {
     },
 
     async createTag(nom) {
-      const res = await api('https://projetl2.onrender.com/api/tags', {
+      const res = await api('https://backend-flashcardulr.onrender.com/api/tags', {
         method: 'POST',
         body: JSON.stringify({ nom }),
         headers: {

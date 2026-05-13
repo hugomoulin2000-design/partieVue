@@ -82,7 +82,7 @@ function answer(isCorrect) {
 async function endSession() {
   clearInterval(timer)
 
-  await api("https://projetl2.onrender.com/api/revision-log", {
+  await api("https://backend-flashcardulr.onrender.com/api/revision-log", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

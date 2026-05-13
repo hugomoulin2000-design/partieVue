@@ -41,7 +41,7 @@ function formatDate(date) {
     <div v-for="(u, i) in store[tab]" :key="u.id" class="row">
       <div class="pos">#{{ i + 1 }}</div>
 
-      <img :src="u.image_name ? `https://projetl2.onrender.com/uploads/users/${u.image_name}` : '/default_avatar.jpg'" class="avatar"/>
+      <img :src="u.image_name ? `https://backend-flashcardulr.onrender.com/uploads/users/${u.image_name}` : '/default_avatar.jpg'" class="avatar"/>
 
 
       <div class="info">
