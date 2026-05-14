@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import './assets/global.css'
+import './assets/index.css'
 import { useAuthStore } from './stores/authStore'
 
 import router from './router'

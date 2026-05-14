@@ -15,8 +15,9 @@ onMounted(() => {
 
 <template>
 <div class="container deck-detail" v-if="deckStore.deck">
-
+<div class="page-title">
   <h1>{{ deckStore.deck.titre }}</h1>
+</div>
   <p class="description">{{ deckStore.deck.description }}</p>
 
   <p class="count">

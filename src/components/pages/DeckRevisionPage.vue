@@ -79,6 +79,7 @@ function answer(isCorrect) {
     index.value = 0
   }
 }
+//log de la revision
 async function endSession() {
   clearInterval(timer)
 

@@ -65,36 +65,38 @@ function logout() {
 </script>
 
 <template>
-  <section class="container">
-    <h1>Mon profil</h1>
+  <div class="page">
+    <div class="page-title-wrap">
+      <div class="page-title">
+        <h1>Mon Compte</h1>
+      </div>
+    </div>
+    
+    <div class="profile-card">
+      <div class="profile-avatar-wrap">
+        <img :src="imageUrl" alt="Photo de profil" class="profile-avatar" />
+      </div>
 
-    <div class="profile-section">
-      <img :src="imageUrl" alt="Photo de profil" class="avatar" />
+      <div class="profile-info">
+        <p class="profile-username">{{ user.username }}</p>
+      </div>
 
-      <input type="file" @change="uploadImage" />
+      <div class="profile-actions">
+        <label class="btn-outline profile-upload">
+          Changer la photo
+          <input type="file" @change="uploadImage" style="display:none" />
+        </label>
 
-      <button class="btn danger" @click="deleteImage">
-        Supprimer la photo
-      </button>
+        <button class="danger" @click="deleteImage">
+          Supprimer la photo
+        </button>
+      </div>
     </div>
 
-    <button class="btn" @click="logout">
-      Déconnexion
-    </button>
-  </section>
+    <div class="profile-logout">
+      <button class="btn-outline" @click="logout">
+        Déconnexion
+      </button>
+    </div>
+  </div>
 </template>
-
-<style scoped>
-.profile-section {
-  margin-bottom: 20px;
-}
-
-.avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-  margin-bottom: 10px;
-}
-</style>

@@ -5,9 +5,6 @@ defineProps({
 </script>
 
 <template>
-  <span class="tag">{{ tag.nom }}
-
-  </span>
+  <div class="tag-card">{{ tag.nom }}</div>
 </template>
-
 

@@ -2,12 +2,14 @@
 import { ref, onMounted } from 'vue'
 import { useDeckStore } from '@/stores/deckStore'
 import { useFlashcardStore } from '@/stores/flashcardStore'
+import { useTagStore } from '@/stores/tagStore'
 import { api } from '@/api'
 import { difficultyLabels, difficultyOptions } from '@/utils/difficulty'
 document.title = "Mes decks"
 
 const deckStore = useDeckStore()
 const flashcardStore = useFlashcardStore()
+const tagStore = useTagStore()
 
 const decks = ref([])
 const selectedDeckId = ref(null)
@@ -29,10 +31,15 @@ const editingCardId = ref(null)
 const editQuestion = ref('')
 const editAnswer = ref('')
 
+const loading = ref(true)
+
+const newTagNameEdit = ref('')
+
 onMounted(async () => {
   decks.value = await deckStore.fetchMyDecks()
   const res = await api("https://backend-flashcardulr.onrender.com/api/tags")
   if (res.ok) allTags.value = await res.json()
+  loading.value = false
 })
 
 function startEditDeck(deck) {
@@ -47,6 +54,17 @@ function startEditDeck(deck) {
 function selectEditTag(index, tagId) {
   editTags.value[index] = tagId
   if (index === editDropdowns.value.length - 1) editDropdowns.value.push(null)
+}
+
+async function addTagEdit() {
+  if (!newTagNameEdit.value.trim()) return
+  const tag = await tagStore.createTag(newTagNameEdit.value)
+  allTags.value.push(tag)
+  const lastIndex = editDropdowns.value.length - 1
+  editDropdowns.value[lastIndex] = tag.id
+  editTags.value[lastIndex] = tag.id
+  editDropdowns.value.push(null)
+  newTagNameEdit.value = ''
 }
 
 async function saveEditDeck(id) {
@@ -126,166 +144,113 @@ async function addFlashcard() {
 </script>
 
 <template>
-  <div class="page">
-    <h1>Mes decks</h1>
-      <div v-if="decks.length === 0" class="no-decks">
+  <div class="container">
+
+    <div class="page-title" style="margin-bottom: 25px;">
+      <h1>Mes decks</h1>
+    </div>
+
+    <div v-if="loading" class="no-decks"></div>
+
+    <div v-else-if="decks.length === 0" class="no-decks">
       Aucun decks pour l'instant...
-      <router-link to="/create-deck" class="create-link">
+      <router-link to="/decks/creer" class="create-link">
         Créer un deck ?
       </router-link>
     </div>
 
     <div v-else>
-    <div v-for="deck in decks" :key="deck.id" class="deck">
+      <div class="decks-grid-2">
+        <div v-for="deck in decks" :key="deck.id" class="deck">
 
-      <div v-if="editingDeckId !== deck.id">
-        <h2>{{ deck.titre }}</h2>
-        <p>{{ deck.description }}</p>
-        <p>Difficulté : {{ difficultyLabels[deck.difficulte] }}</p>
+          <div v-if="editingDeckId !== deck.id">
+            <div class="deck-item-header">
+              <h3>{{ deck.titre }}</h3>
+              <span class="deck-difficulty">{{ difficultyLabels[deck.difficulte] }}</span>
+            </div>
+            <p class="deck-description">{{ deck.description }}</p>
+            <div class="tags">
+              <span v-for="tag in deck.tags" :key="tag.id" class="tag">{{ tag.nom }}</span>
+            </div>
 
-        <div class="tags">
-          <span v-for="tag in deck.tags" :key="tag.id" class="tag">
-            {{ tag.nom }}
-          </span>
-        </div>
-
-        <button @click="startEditDeck(deck)">Modifier</button>
-        <button @click="deleteDeck(deck.id)" class="danger">Supprimer</button>
-        <button @click="openDeck(deck.id)">Voir les cartes</button>
-      </div>
-
-      <div v-else class="edit-form">
-        <input v-model="editTitre" placeholder="Titre" />
-        <textarea v-model="editDescription" placeholder="Description"></textarea>
-
-        <label>Difficulté</label>
-        <select v-model="editDifficulte">
-          <option v-for="opt in difficultyOptions" :key="opt.value" :value="opt.value">
-            {{ opt.label }}
-          </option>
-        </select>
-
-        <label>Tags</label>
-
-        <div class="tag-dropdowns">
-          <select
-            v-for="(value, index) in editDropdowns"
-            :key="index"
-            class="tag-dropdown"
-            v-model="editDropdowns[index]"
-            @change="selectEditTag(index, editDropdowns[index])"
-          >
-            <option disabled value="">Choisir un tag</option>
-
-            <option
-              v-for="tag in allTags.filter(t => t.id === editDropdowns[index] || !editTags.includes(t.id))"
-              :key="tag.id"
-              :value="tag.id"
-            >
-              {{ tag.nom }}
-            </option>
-          </select>
-        </div>
-
-        <button @click="saveEditDeck(deck.id)">Enregistrer</button>
-        <button @click="editingDeckId = null">Annuler</button>
-      </div>
-
-      <div v-if="selectedDeckId === deck.id" class="flashcards">
-        <h3>Flashcards</h3>
-
-        <div class="add-card">
-          <input v-model="newQuestion" placeholder="Nouvelle question" />
-          <input v-model="newAnswer" placeholder="Nouvelle réponse" />
-          <button @click="addFlashcard">Ajouter</button>
-        </div>
-
-        <div v-for="card in flashcards" :key="card.id" class="flashcard">
-          <div v-if="editingCardId !== card.id">
-            <p>Question: {{ card.question }}</p>
-            <p>Réponse: {{ card.answer }}</p>
-
-            <button @click="startEditCard(card)">Modifier</button>
-            <button class="danger" @click="deleteCard(card.id)">Supprimer</button>
+            <div style="display: flex; gap: 10px; margin-top: 16px;">
+              <button @click="startEditDeck(deck)">Modifier</button>
+              <button @click="deleteDeck(deck.id)" class="danger">Supprimer</button>
+              <button @click="openDeck(deck.id)">Voir les cartes</button>
+            </div>
           </div>
 
-          <div v-else>
-            <input v-model="editQuestion" />
-            <input v-model="editAnswer" />
+          <div v-else class="edit-form">
+            <input v-model="editTitre" placeholder="Titre" />
+            <textarea v-model="editDescription" placeholder="Description"></textarea>
 
-            <button @click="saveCard(card.id)">Enregistrer</button>
-            <button @click="editingCardId = null">Annuler</button>
+            <label>Difficulté</label>
+            <select v-model="editDifficulte">
+              <option v-for="opt in difficultyOptions" :key="opt.value" :value="opt.value">
+                {{ opt.label }}
+              </option>
+            </select>
+
+            <label>Tags</label>
+            <div class="tag-dropdowns">
+              <select
+                v-for="(value, index) in editDropdowns"
+                :key="index"
+                class="tag-dropdown"
+                v-model="editDropdowns[index]"
+                @change="selectEditTag(index, editDropdowns[index])"
+              >
+                <option disabled value="">Choisir un tag</option>
+                <option
+                  v-for="tag in allTags.filter(t => t.id === editDropdowns[index] || !editTags.includes(t.id))"
+                  :key="tag.id"
+                  :value="tag.id"
+                >
+                  {{ tag.nom }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-top: 12px;">
+              <input v-model="newTagNameEdit" placeholder="Nouveau tag" />
+              <button @click="addTagEdit" style="margin-top: 8px;">Ajouter</button>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 8px;">
+              <button @click="saveEditDeck(deck.id)">Enregistrer</button>
+              <button @click="editingDeckId = null" class="btn-outline">Annuler</button>
+            </div>
           </div>
+
+          <div v-if="selectedDeckId === deck.id" class="flashcards">
+            <h3>Flashcards</h3>
+
+            <div class="add-card">
+              <input v-model="newQuestion" placeholder="Nouvelle question" />
+              <input v-model="newAnswer" placeholder="Nouvelle réponse" />
+              <button @click="addFlashcard">Ajouter</button>
+            </div>
+
+            <div v-for="card in flashcards" :key="card.id" class="flashcard">
+              <div v-if="editingCardId !== card.id">
+                <p>Question: {{ card.question }}</p>
+                <p>Réponse: {{ card.answer }}</p>
+                <button @click="startEditCard(card)">Modifier</button>
+                <button class="danger" @click="deleteCard(card.id)">Supprimer</button>
+              </div>
+
+              <div v-else>
+                <input v-model="editQuestion" />
+                <input v-model="editAnswer" />
+                <button @click="saveCard(card.id)">Enregistrer</button>
+                <button @click="editingCardId = null">Annuler</button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-
     </div>
-  </div>
+
   </div>
 </template>
-
-<style scoped>
-.page {
-  max-width: 700px;
-  margin: 40px auto;
-}
-
-.deck {
-  border: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-}
-
-.tags {
-  margin: 8px 0;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.tag {
-  background: #eee;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-}
-
-.tag-dropdown {
-  display: block;
-  margin-bottom: 8px;
-  padding: 6px;
-}
-
-.flashcards {
-  margin-top: 20px;
-  padding-left: 20px;
-}
-
-.flashcard {
-  border: 1px solid #ccc;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-}
-
-.add-card {
-  margin-bottom: 20px;
-}
-
-.edit-form input,
-.edit-form textarea,
-.edit-form select {
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-button {
-  margin-right: 10px;
-}
-
-button.danger {
-  background: #d9534f;
-  color: white;
-}
-</style>

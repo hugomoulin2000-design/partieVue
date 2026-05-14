@@ -9,25 +9,27 @@ const route = useRoute()
 const tagStore = useTagStore()
 
 const decks = ref([])
-
+const tag = ref()
 onMounted(async () => {
-
+  tag.value = await tagStore.fetchTag(route.params.id)
   decks.value = await tagStore.fetchDecksForTag(route.params.id)
 })
 </script>
 
-
 <template>
   <div class="container">
-    <h1>Liste des decks</h1>
-
-
-
-  <router-link v-for="deck in decks" :key="deck.id" :to="`/decks/${deck.id}`" class="deck-card">
-
-    <DeckComponent :deck="deck" />
-
-  </router-link>
+    <div class="page-title" style="margin-bottom: 25px;">
+      <h1>Liste des decks — <span style="color: var(--color-blue)">{{ tag?.nom }}</span></h1>
+    </div>
+    <div class="decks-grid">
+      <router-link
+        v-for="deck in decks"
+        :key="deck.id"
+        :to="`/decks/${deck.id}`"
+        class="deck-item"
+      >
+        <DeckComponent :deck="deck" />
+      </router-link>
+    </div>
   </div>
-
 </template>
