@@ -15,7 +15,7 @@ if (auth.isAuthenticated) {
 
 <template>
   <div class="home-container">
-
+    <!-- affichage different si user pas conecté; affichage personalisé-->
     <div v-if="auth.isAuthenticated" class="welcome-box">
       <h1>👋 Bonjour {{ user.username }}</h1>
       <p>Ravi de te revoir ! Prêt à réviser tes flashcards ?</p>

@@ -1,9 +1,5 @@
-/* ============================================================
-   FLASHCARDS APP — CSS GLOBAL
-   Ajoute en haut de ce fichier :
-   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
-   ============================================================ */
-
+/* Le design n'étant pas mon point fort, je me suis servi de figma pour
+la maquette globale du site ainsi que de claude pour une grande partie du css/
 /* ------------------------------
    VARIABLES
 ------------------------------ */
@@ -103,7 +99,22 @@ a {
   margin: 56px auto;
 }
 
+/* ------------------------------
+   PAGE TITLE
+------------------------------ */
 
+.page-title-wrap {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.page-title {
+  display: inline-block;
+  padding: 10px 24px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
 
 /* ------------------------------
    HEADER
@@ -411,7 +422,102 @@ select:focus {
 }
 
 /* ------------------------------
-   DECK CARDS (liste)
+   DECKS GRID
+------------------------------ */
+
+.decks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.decks-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.deck-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  border-bottom: 4px solid var(--color-blue);
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  position: relative;
+}
+
+.deck-item::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 6px;
+  right: 6px;
+  height: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  border-bottom: 4px solid var(--color-border-hover);
+  z-index: -1;
+}
+
+.deck-item::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 12px;
+  right: 12px;
+  height: 100%;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  z-index: -2;
+}
+
+.deck-item:hover {
+  border-color: var(--color-blue);
+}
+
+.deck-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.deck-item-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.deck-difficulty {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-blue);
+  background: var(--color-blue-light);
+  border: 1px solid var(--color-blue-border);
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.deck-description {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ------------------------------
+   DECK CARDS (ancienne liste)
 ------------------------------ */
 
 .deck-card {
@@ -550,22 +656,69 @@ select:focus {
   color: var(--color-text-muted);
 }
 
-.start-revisions {
+.deck-info-block {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
   display: flex;
-  justify-content: center;
-  padding-top: 36px;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.deck-info-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.deck-meta {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.deck-revise-btn {
+  width: auto;
+  white-space: nowrap;
+  padding: 12px 28px;
+}
+
+.flashcards-preview {
+  margin-top: 8px;
+}
+
+.flashcards-preview h2 {
+  margin-bottom: 16px;
+}
+
+.flashcards-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.flashcard-preview-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  font-size: 15px;
+  color: var(--color-text-primary);
+  min-height: 80px;
 }
 
 /* ------------------------------
    RÉVISIONS
 ------------------------------ */
 
-.revision .counter {
-  text-align: center;
-  font-size: 15px;
-  color: var(--color-text-muted);
-  margin-top: 8px;
-  margin-bottom: 4px;
+.start-revisions {
+  display: flex;
+  justify-content: center;
+  padding-top: 36px;
 }
 
 .revision .card {
@@ -574,6 +727,42 @@ select:focus {
   padding: 32px 28px;
   border-radius: var(--radius-lg);
   margin: 24px 0;
+}
+
+.revision .card:hover {
+  transform: none;
+  border-color: var(--color-border);
+}
+
+.card-progress {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-bottom: 24px;
+}
+
+.card-question-block,
+.card-answer-block {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.card-answer-block {
+  border-top: 1px solid var(--color-border);
+  margin-top: 20px;
+}
+
+.card-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
 }
 
 .revision .question {
@@ -602,12 +791,9 @@ select:focus {
 }
 
 .actions .bad    { background: var(--color-red); }
-.actions .medium { background: var(--color-amber); }
 .actions .good   { background: var(--color-green); }
-
-.actions .bad:hover    { background: #dc2626; }
-.actions .medium:hover { background: #d97706; }
-.actions .good:hover   { background: #16a34a; }
+.actions .bad:hover  { background: #dc2626; }
+.actions .good:hover { background: #16a34a; }
 
 .finished {
   text-align: center;
@@ -978,8 +1164,6 @@ select:focus {
   color: var(--color-blue-dark);
 }
 
-
-
 /* ------------------------------
    PAGE TAGS
 ------------------------------ */
@@ -1002,121 +1186,11 @@ select:focus {
   color: var(--color-text-primary);
   text-decoration: none;
   transition: border-color 0.15s ease, transform 0.15s ease;
+  display: block;
 }
 
 .tag-card:hover {
   border-color: var(--color-blue);
   color: var(--color-blue);
   transform: translateY(-2px);
-}
-
-.page-title-wrap {
-  text-align: center;
-  margin-bottom: 36px;
-}
-
-
-
-.page-title {
-  display: inline-block;
-  padding: 10px 24px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-}
-
-/* ------------------------------
-   DECKS GRID
------------------------------- */
-.decks-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.deck-item {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  border-bottom: 4px solid var(--color-blue);
-  padding: 24px;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: transform 0.15s ease, border-color 0.15s ease;
-  position: relative;
-}
-
-.deck-item::before {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 6px;
-  right: 6px;
-  height: 100%;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  border-bottom: 4px solid var(--color-border-hover);
-  z-index: -1;
-}
-
-.deck-item::after {
-  content: '';
-  position: absolute;
-  bottom: -14px;
-  left: 12px;
-  right: 12px;
-  height: 100%;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  z-index: -2;
-}
-
-.deck-item:hover {
-
-  border-color: var(--color-blue);
-}
-
-.deck-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.deck-item-header h3 {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0;
-}
-
-.deck-difficulty {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--color-blue);
-  background: var(--color-blue-light);
-  border: 1px solid var(--color-blue-border);
-  padding: 3px 10px;
-  border-radius: 20px;
-  white-space: nowrap;
-}
-
-.deck-description {
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  margin: 0;
-  line-height: 1.5;
-}
-
-
-.decks-grid-2 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  align-items: start;
 }

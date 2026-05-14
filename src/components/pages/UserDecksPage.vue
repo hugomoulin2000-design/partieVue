@@ -170,7 +170,9 @@ async function addFlashcard() {
             </div>
             <p class="deck-description">{{ deck.description }}</p>
             <div class="tags">
-              <span v-for="tag in deck.tags" :key="tag.id" class="tag">{{ tag.nom }}</span>
+              <router-link v-for="tag in deck.tags" :key="tag.id" :to="`/tags/${tag.id}`" class="tag">
+                {{ tag.nom }}
+              </router-link>
             </div>
 
             <div style="display: flex; gap: 10px; margin-top: 16px;">

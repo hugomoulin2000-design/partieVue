@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useDeckStore } from '@/stores/deckStore'
 import { useFlashcardStore } from '@/stores/flashcardStore'
 import { useTagStore } from '@/stores/tagStore'
@@ -22,6 +22,10 @@ const flashcards = ref([])
 
 const selectedTags = ref([])
 const dropdowns = ref([null])
+
+const newTagName = ref('')
+
+const hasFlashcard = computed(() => flashcards.value.length > 0)
 
 onMounted(async () => {
   await tagStore.fetchTags()
@@ -61,9 +65,6 @@ async function addFlashcard() {
   answer.value = ''
 }
 
-
-const newTagName = ref("")
-
 async function addTag() {
   if (!newTagName.value.trim()) return
 
@@ -74,7 +75,7 @@ async function addTag() {
   selectedTags.value[lastIndex] = tag.id
   dropdowns.value.push(null)
 
-  newTagName.value = ""
+  newTagName.value = ''
 }
 </script>
 
@@ -159,7 +160,11 @@ async function addTag() {
         </li>
       </ul>
 
-      <router-link :to="`/decks/${deckId}`">
+      <p v-if="!hasFlashcard" style="color: var(--color-red); font-size: 14px; margin-top: 12px;">
+        Ajoutez au moins une flashcard avant de terminer.
+      </p>
+
+      <router-link v-if="hasFlashcard" :to="`/decks/${deckId}`">
         <button style="margin-top: 16px;">Terminer</button>
       </router-link>
     </section>

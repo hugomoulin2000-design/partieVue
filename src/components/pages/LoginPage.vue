@@ -43,7 +43,7 @@ async function submit() {
   <div class="auth-container">
     <div class="auth-card">
       <h1>Connexion</h1>
-
+      
       <form @submit.prevent="submit">
         <div class="form-group">
           <label>Nom d'utilisateur</label>

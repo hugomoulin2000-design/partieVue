@@ -98,40 +98,48 @@ async function endSession() {
 <template>
   <div class="container revision">
 
+    <div class="page-title" style="margin-bottom: 25px;">
+      <h1>{{ deck ? `Révision : ${deck.titre}` : 'Révision' }}</h1>
+    </div>
+
     <div class="start-revisions" v-if="!start">
-      <button class="btn-primary" @click="startRevisions()">Démarrer les revisions</button>
+      <button @click="startRevisions()">Démarrer les révisions</button>
     </div>
 
     <div v-if="start">
-      <h1 v-if="deck">Révision : {{ deck.titre }}</h1>
-      <p class="counter" v-if="!done">
-        {{ bonneReponses }} / {{ total }} bonnes réponses
-      </p>
 
       <div v-if="done" class="finished">
-        Toutes les cartes sont justes !
-        <p>
-          <router-link to="/decks">Retour</router-link>
-        </p>
+        <p style="font-size: 22px">Toutes les cartes sont justes ! </p>
+        <router-link to="/decks">
+          <button style="margin-top: 20px;">Retour aux decks</button>
+        </router-link>
       </div>
 
       <div v-else-if="currentCard" class="card">
-        <p class="question">{{ currentCard.question }}</p>
+        <div class="card-progress">
+          {{ bonneReponses }} / {{ total }} bonnes réponses
+        </div>
 
-        <p v-if="showAnswer" class="answer">
-          {{ currentCard.answer }}
-        </p>
+        <div class="card-question-block">
+          <span class="card-label">Question</span>
+          <p class="question">{{ currentCard.question }}</p>
+        </div>
+
+        <div v-if="showAnswer" class="card-answer-block">
+          <span class="card-label">Réponse</span>
+          <p class="answer">{{ currentCard.answer }}</p>
+        </div>
       </div>
 
-      <button v-if="!showAnswer && !done && currentCard" class="btn-primary" @click="reveal">
-        Voir la réponse
-      </button>
+      <div class="start-revisions" v-if="!showAnswer && !done && currentCard">
+        <button @click="reveal">Voir la réponse</button>
+      </div>
 
       <div v-if="showAnswer && !done" class="actions">
         <button class="bad" @click="answer(false)">Je ne savais pas</button>
-        <button class="medium" @click="answer(false)">J'ai hésité</button>
         <button class="good" @click="answer(true)">Je savais</button>
       </div>
+
     </div>
 
   </div>
