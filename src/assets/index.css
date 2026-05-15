@@ -342,7 +342,7 @@ select:focus {
 ------------------------------ */
 
 .tag {
-  display: inline-block;
+  display: flex;
   background: #f0f0ee;
   color: #555;
   padding: 6px 14px;
